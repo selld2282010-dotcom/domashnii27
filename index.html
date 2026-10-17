@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!--
+  ===================== КАК ПОЛЬЗОВАТЬСЯ =====================
+  Папка содержит:
+   index.html  — разметка страницы (обычно не трогаешь)
+   style.css   — оформление; в конце файла блок «ФОН»
+   script.js   — ТУТ ВСЕ НАСТРОЙКИ: 1 ник, 2 описание, 3 аватарка, 4 соцсети, 5 песни (5 штук)
+   bg.gif      — фон-картинка
+   music/      — сюда кладёшь mp3
+   covers/     — сюда кладёшь обложки песен
+  Открой script.js и ищи слово «НИК» — там всё подписано.
+  Чтобы ссылку можно было вставить в Steam, всю папку нужно выложить в интернет (GitHub Pages, Netlify и т.п.).
+  ============================================================
+-->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My porfile</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bg"></div>
+<section class="page">
+ <div class="glass card rv float">
+  <div class="avatar" id="avatar">N</div>
+  <h1 id="nick">Domashnii27</h1>
+  <p class="about" id="about"></p>
+  </div>
+ <div class="dock rv" id="links"></div>
+</section>
+<section class="page" id="music">
+  <div class="glass player rv" id="pl">
+   <div class="stage" id="stage"></div>
+   <div class="meta2"><b id="title"></b><span id="artist"></span></div>
+   <div class="bar"><i id="prog"></i></div>
+   <div class="ctrl">
+    <button id="prev" aria-label="Назад"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM9.5 12 18 18V6z"/></svg></button>
+    <button id="play" class="main" aria-label="Играть"><svg id="ico" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+    <button id="next" aria-label="Дальше"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg></button>
+   </div>
+  </div>
+</section>
+<script src="script.js"></script>
+</body>
+</html>
