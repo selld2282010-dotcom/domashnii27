@@ -37,7 +37,7 @@ const P = {
     // ----- ПЕСНЯ 1 -----
     {title:"Романтично", artist:"Uglystephan", src:"music/Романтично (Bonus).mp3", cover:"covers/Романтично.png", chord:[220,277.2,329.6]},
     // ----- ПЕСНЯ 2 -----
-    {title:"worlds fuck", artist:"Sematary & Ghost Mountain", src:"covers/worldsfuck.mp3", cover:"music/worldsfuck.jpg", chord:[196,246.9,293.7]},
+    {title:"worlds fuck", artist:"Sematary & Ghost Mountain", src:"music/worldsfuck.mp3", cover:"covers/worldsfuck.jpg", chord:[196,246.9,293.7]},
     // ----- ПЕСНЯ 3 -----
     {title:"love sosa", artist:"chief keef", src:"music/lovesosa.mp3", cover:"covers/lovesosa.jpg", chord:[174.6,220,261.6]},
     // ----- ПЕСНЯ 4 -----
@@ -46,10 +46,22 @@ const P = {
     {title:"Название песни 5", artist:"Исполнитель", src:"", cover:"", chord:[207.7,261.6,311.1]}
   ]
 };
+// ============ 6. КОММЕНТАРИИ ============
+// Пока url и key пустые "" — блока комментариев на сайте нет вообще.
+const COMMENTS = {
+  // Project URL из Supabase, например "https://abcdefgh.supabase.co"
+  url: "https://yynqmgejtfckqpvfjbkj.supabase.co",
+  key: "sb_publishable_txp7OPSVqoyCpc1H2ZCqWg_b3pqJOoP",
+  // ФИЛЬТР СЛОВ: эти слова на сайте заменятся звёздочками. Регистр не важен.
+  badWords: ["плохоеслово1", "плохоеслово2"],
+  // Сколько последних комментариев показывать
+  maxShown: 50
+};
+
 // ============ КОНЕЦ НАСТРОЕК. Ниже код — трогать не нужно ============
 const $=id=>document.getElementById(id);
 $("nick").textContent=P.nick; $("about").textContent=P.about;
-if(P.avatar){const m=document.createElement("img");m.src=P.avatar;$("avatar").textContent="";$("avatar").appendChild(m)}else $("avatar").textContent=P.nick.trim().charAt(0).toUpperCase();
+if(P.avatar){const m=document.createElement("img");m.src=encodeURI(P.avatar);$("avatar").textContent="";$("avatar").appendChild(m)}else $("avatar").textContent=P.nick.trim().charAt(0).toUpperCase();
 const ICONS={
 Steam:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.500" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="15.200" cy="9.500" r="3" fill="none" stroke="currentColor" stroke-width="1.800"/><circle cx="8.800" cy="15.800" r="2.300"/><path d="M3 12.800l5.600 2.800M11.200 14.200l1.800-2.200" fill="none" stroke="currentColor" stroke-width="1.800" stroke-linecap="round"/></svg>',
 Telegram:'<svg viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>',
@@ -63,7 +75,7 @@ function show(){layout();const t=P.tracks[i];$('pl').classList.toggle('playing',
 function stopSound(){nodes.forEach(n=>{try{n.g.gain.setTargetAtTime(0,ctx.currentTime,.15);n.o.stop(ctx.currentTime+.6)}catch(e){}});nodes=[];if(audio){audio.pause();audio=null}cancelAnimationFrame(raf)}
 function startSound(){
   stopSound();const t=P.tracks[i];start=performance.now();
-  if(t.src){audio=new Audio(t.src);audio.onended=()=>go(1);audio.play().catch(()=>{})}
+  if(t.src){audio=new Audio(encodeURI(t.src));audio.onended=()=>go(1);audio.play().catch(()=>{})}
   else{
     ctx=ctx||new (window.AudioContext||window.webkitAudioContext)();
     t.chord.forEach((f,k)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type="sine";o.frequency.value=f;g.gain.value=0;g.gain.setTargetAtTime(.07,ctx.currentTime,.5);o.connect(g).connect(ctx.destination);o.start();nodes.push({o,g});
@@ -88,9 +100,55 @@ function layout(){[...$("stage").children].forEach((el,k)=>{const d=off(k),a=Mat
  else{tr=`translateX(${sg*150}px) translateZ(-160px) rotateY(${-sg*45}deg) scale(.5)`;op=0}
  el.style.transform=tr;el.style.opacity=op;el.style.zIndex=10-a*3;el.style.pointerEvents=a>1?"none":"auto";el.classList.toggle("c",d===0)})}
 P.tracks.forEach((t,k)=>{const d=document.createElement("div");d.className="cv";
- if(t.cover){d.style.backgroundImage="url("+t.cover+")"}else{d.style.background=`linear-gradient(135deg,${GR[k%5][0]},${GR[k%5][1]})`;d.textContent="♪"}
+ if(t.cover){d.style.backgroundImage='url("'+encodeURI(t.cover)+'")'}else{d.style.background=`linear-gradient(135deg,${GR[k%5][0]},${GR[k%5][1]})`;d.textContent="♪"}
  d.onclick=()=>{const o=off(k);if(o!==0)go(o)};$("stage").appendChild(d)});
 show();
 const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add("in")}),{threshold:.25});
 document.querySelectorAll(".rv").forEach(el=>io.observe(el));
 setTimeout(()=>document.querySelector(".card").classList.add("in"),150);
+
+/* ===== Комментарии (код, трогать не нужно) ===== */
+(function(){
+  const C=COMMENTS, sec=document.getElementById("comments");
+  if(!sec||!C.url||!C.key) return;
+  sec.hidden=false;
+  const api=C.url.replace(/\/$/,"")+"/rest/v1/comments";
+  const H={apikey:C.key,"Content-Type":"application/json"};
+  if(C.key.startsWith("eyJ")) H.Authorization="Bearer "+C.key;
+  const list=document.getElementById("cmList"),form=document.getElementById("cmForm"),st=document.getElementById("cmStatus");
+  const clean=t=>{let r=String(t);C.badWords.forEach(w=>{if(!w)return;r=r.replace(new RegExp(w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"gi"),m=>"*".repeat(m.length))});return r};
+  function render(rows){
+    list.textContent="";
+    if(!rows.length){st.textContent="Пока комментариев нет — напиши первым!";return}
+    st.textContent="";
+    rows.forEach((r,k)=>{
+      const d=document.createElement("div");d.className="cmi";d.style.animationDelay=Math.min(k,8)*.06+"s";
+      const b=document.createElement("b");b.textContent=clean(r.name);
+      const t=document.createElement("time");t.textContent=new Date(r.created_at).toLocaleDateString("ru-RU",{day:"numeric",month:"long"});
+      const p=document.createElement("p");p.textContent=clean(r.text);
+      d.append(b,t,p);list.appendChild(d);
+    });
+  }
+  async function load(){
+    try{
+      const r=await fetch(api+"?select=name,text,created_at&approved=eq.true&order=created_at.desc&limit="+C.maxShown,{headers:H});
+      if(!r.ok)throw 0;render(await r.json());
+    }catch(e){st.textContent="Ошибка загрузки комментариев."}
+  }
+  form.addEventListener("submit",async e=>{
+    e.preventDefault();
+    if(document.getElementById("cmTrap").value)return;
+    const name=document.getElementById("cmName").value.trim(),text=document.getElementById("cmText").value.trim();
+    if(!name||!text)return;
+    try{const last=+localStorage.getItem("cm_last")||0;if(Date.now()-last<30000){st.textContent="Подожди немного перед следующим комментарием.";return}}catch(_){}
+    const btn=form.querySelector("button");btn.disabled=true;st.textContent="Отправляю…";
+    try{
+      const r=await fetch(api,{method:"POST",headers:{...H,Prefer:"return=minimal"},body:JSON.stringify({name,text})});
+      if(!r.ok)throw 0;
+      form.reset();try{localStorage.setItem("cm_last",Date.now())}catch(_){}
+      st.textContent="Спасибо! Комментарий появится после проверки ✨";
+    }catch(err){st.textContent="Ошибка отправки, попробуй позже."}
+    btn.disabled=false;
+  });
+  load();
+})();
