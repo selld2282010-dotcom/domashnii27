@@ -39,9 +39,9 @@ const P = {
     // ----- ПЕСНЯ 2 -----
     {title:"worlds fuck", artist:"Sematary & Ghost Mountain", src:"music/worldsfuck.mp3", cover:"covers/worldsfuck.jpg", chord:[196,246.9,293.7]},
     // ----- ПЕСНЯ 3 -----
-    {title:"love sosa", artist:"chief keef", src:"music/lovesosa.mp3", cover:"covers/lovesosa.jpg", chord:[174.6,220,261.6]},
+    {title:"love sosa", artist:"chief keef", src:"covers/lovesosa.mp3", cover:"music/lovesosa.jpg", chord:[174.6,220,261.6]},
     // ----- ПЕСНЯ 4 -----
-    {title:"Название песни 4", artist:"Исполнитель", src:"", cover:"", chord:[233.1,293.7,349.2]},
+    {title:"The Love I Lost", artist:"Fried By Fluoride", src:"", cover:"", chord:[233.1,293.7,349.2]},
     // ----- ПЕСНЯ 5 -----
     {title:"Название песни 5", artist:"Исполнитель", src:"", cover:"", chord:[207.7,261.6,311.1]}
   ]
