@@ -16,7 +16,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>My porfile</title>
+<title>My profile</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -26,7 +26,7 @@
   <div class="avatar" id="avatar">N</div>
   <h1 id="nick">Domashnii27</h1>
   <p class="about" id="about"></p>
-  </div>
+ </div>
  <div class="dock rv" id="links"></div>
 </section>
 <section class="page" id="music">
@@ -39,6 +39,19 @@
     <button id="play" class="main" aria-label="Играть"><svg id="ico" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
     <button id="next" aria-label="Дальше"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg></button>
    </div>
+  </div>
+</section>
+<section class="page" id="comments" hidden>
+  <div class="glass cm rv">
+   <h2>Комментарии</h2>
+   <form id="cmForm" autocomplete="off">
+    <input id="cmName" type="text" maxlength="30" placeholder="Твоё имя" required>
+    <textarea id="cmText" maxlength="300" placeholder="Напиши что-нибудь…" required></textarea>
+    <input class="hp" id="cmTrap" type="text" tabindex="-1" aria-hidden="true">
+    <button class="send" type="submit">Отправить</button>
+   </form>
+   <div class="cm-status" id="cmStatus"></div>
+   <div class="cm-list" id="cmList"></div>
   </div>
 </section>
 <script src="script.js"></script>
