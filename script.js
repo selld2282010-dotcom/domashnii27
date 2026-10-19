@@ -41,7 +41,7 @@ const P = {
     // ----- ПЕСНЯ 3 -----
     {title:"love sosa", artist:"chief keef", src:"music/lovesosa.mp3", cover:"covers/lovesosa.jpg", chord:[174.6,220,261.6]},
     // ----- ПЕСНЯ 4 -----
-    {title:"Название песни 4", artist:"Исполнитель", src:"", cover:"", chord:[233.1,293.7,349.2]},
+    {title:"The love I lost", artist:"Fried By Fluoride", src:"music/theloveIlost.mp3", cover:"covers/theloveIlost.png", chord:[233.1,293.7,349.2]},
     // ----- ПЕСНЯ 5 -----
     {title:"Название песни 5", artist:"Исполнитель", src:"", cover:"", chord:[207.7,261.6,311.1]}
   ]
